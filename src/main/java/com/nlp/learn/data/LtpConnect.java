@@ -1,4 +1,4 @@
-package com.yzc.bigdata.base.nlp.ltp;
+package com.nlp.learn.data;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -8,7 +8,6 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.LoggerFactory;
-
 
 import java.nio.charset.Charset;
 
