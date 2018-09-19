@@ -6,6 +6,7 @@ import com.hankcs.hanlp.dictionary.CustomDictionary;
 import com.hankcs.hanlp.seg.NShort.NShortSegment;
 import com.hankcs.hanlp.seg.Segment;
 import com.hankcs.hanlp.seg.common.Term;
+import com.hankcs.hanlp.tokenizer.SpeedTokenizer;
 import com.nlp.learn.tool.DecimalCalculate;
 
 import java.io.*;
@@ -37,6 +38,8 @@ public class Bayes {
 
     private static Segment nShortSegment;  //分词器
 
+    private static Segment segment = SpeedTokenizer.SEGMENT.enableCustomDictionary(true).enablePlaceRecognize(true).enableOrganizationRecognize(true);
+
     static {
 //        InputStream in = Bayes.class.getClassLoader().getResourceAsStream("F:\\ww\\nlp-realize\\data\\dict.txt"); //dictionary/
         try {
@@ -56,7 +59,7 @@ public class Bayes {
 //            reader.close();
             br.close();
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         }
         nShortSegment = new NShortSegment().enableCustomDictionary(true).enablePlaceRecognize(true).enableOrganizationRecognize(true);
 
@@ -70,7 +73,7 @@ public class Bayes {
             }
             br.close();
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         }
     }
 
@@ -92,10 +95,10 @@ public class Bayes {
                 if ("".equals(line)) {
                     continue;
                 }
-                list.addAll(filter(nShortSegment.seg(line)));
+                list.addAll(filter(segment.seg(line)));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         }
         //获取总的数量
         if (type == 1) {
@@ -139,7 +142,7 @@ public class Bayes {
         int max = normalSum;
         double rate = 0.0;
         for (String s : normalMap.keySet()) {
-            rate = DecimalCalculate.div(normalMap.get(s), max);
+            rate = DecimalCalculate.div(normalMap.get(s), max, 15);
             normalScore.put(s, rate);
         }
     }
@@ -154,7 +157,7 @@ public class Bayes {
         int max = spanSum;
         double rate = 0.0;
         for (String s : spanMap.keySet()) {
-            rate = DecimalCalculate.div(spanMap.get(s), max);
+            rate = DecimalCalculate.div(spanMap.get(s), max, 15);
             spanScore.put(s, rate);
         }
     }
@@ -172,7 +175,11 @@ public class Bayes {
             if (normalScore.containsKey(key)) {
                 allRate += normalScore.get(key);
             }
-            retmap.put(key, DecimalCalculate.div(rate, allRate));
+            double ss = DecimalCalculate.div(rate, allRate, 20);
+            if (ss == 1.0) {
+                continue;
+            }
+            retmap.put(key, ss);
         }
     }
 
@@ -187,10 +194,10 @@ public class Bayes {
                 if ("".equals(line)) {
                     continue;
                 }
-                list.addAll(filter(nShortSegment.seg(line)));
+                list.addAll(filter(segment.seg(line)));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
         }
         return list;
     }
@@ -209,10 +216,18 @@ public class Bayes {
                 tempRate *= (1 - retmap.get(word));
             }
         }
-        if (rate + tempRate == 0.0) {
-            return 0.0;
+        return get(rate,tempRate,15);
+    }
+
+
+    private double get(double rate,double tempRate,int scala)
+    {
+        double ss = DecimalCalculate.div(rate, rate + tempRate, scala);
+        if(ss == 0.0){
+            scala+=5;
+            get(rate,tempRate,scala);
         }
-        return DecimalCalculate.div(rate, rate + tempRate);
+        return ss;
     }
 
 
@@ -240,6 +255,12 @@ public class Bayes {
             write4.write(entry.getKey() + "\t" + entry.getValue() + "\n");
         }
         write4.close();
+
+        FileWriter write5 = new FileWriter("F:\\ww\\nlp-realize\\src\\main\\resources\\data\\retmap.txt");
+        for (Map.Entry<String, Double> entry : retmap.entrySet()) {
+            write5.write(entry.getKey() + "\t" + entry.getValue() + "\n");
+        }
+        write5.close();
     }
 
 
@@ -249,13 +270,11 @@ public class Bayes {
         bayes.setSpanScore();
         bayes.createSpamProbabilityMap();
         bayes.writeToFile();
-        for (int i = 1; i <= 2; i++) {
+        for (int i = 1; i <= 8000; i++) {
             String path = "F:\\ww\\nlp-realize\\data\\test\\" + String.valueOf(i);
             List<String> list = bayes.getTestData(path);
             System.out.println(bayes.judgeMail(list));
         }
-
-
     }
 
 
