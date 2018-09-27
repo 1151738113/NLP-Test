@@ -4,6 +4,8 @@ import com.ibm.watson.developer_cloud.discovery.v1.Discovery;
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.NaturalLanguageClassifier;
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.Classification;
 import com.ibm.watson.developer_cloud.natural_language_classifier.v1.model.ClassifyOptions;
+import com.ibm.watson.developer_cloud.natural_language_understanding.v1.NaturalLanguageUnderstanding;
+import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.*;
 import com.ibm.watson.developer_cloud.service.security.IamOptions;
 
 /**
@@ -18,25 +20,37 @@ public class IbmCloud {
         String passwd = "RTXpkiz0vtpF";
         String api_key = "Auto-generated service credentials";
 
-        IamOptions options = new IamOptions.Builder()
-                .apiKey(api_key)
-                .url(url) // optional - the default value is https://iam.bluemix.net/identity/token
+        NaturalLanguageUnderstanding service = new NaturalLanguageUnderstanding("2018-09-27",name,passwd);
+
+        String text = "小明在北京大学";
+
+
+        EntitiesOptions entitiesOptions = new EntitiesOptions.Builder()
+                .emotion(true)
+                .sentiment(true)
+                .limit(10)
                 .build();
-        Discovery service = new Discovery("2018-08-07", options);
-        service.setUsernameAndPassword(name,passwd);
 
-//        NaturalLanguageClassifier service = new NaturalLanguageClassifier();
-//        service.setUsernameAndPassword(name, passwd);
-//
-//        ClassifyOptions classifyOptions = new ClassifyOptions.Builder()
-//                .classifierId("<classifierId>")
-//                .text("Is it sunny?")
-//                .build();
-//        Classification classification = service.classify(classifyOptions).execute();
-//
-//        System.out.println(classification);
+        KeywordsOptions keywordsOptions = new KeywordsOptions.Builder()
+                .emotion(true)
+                .sentiment(true)
+                .limit(10)
+                .build();
 
+        Features features = new Features.Builder()
+                .entities(entitiesOptions)
+                .keywords(keywordsOptions)
+                .build();
 
+        AnalyzeOptions parameters = new AnalyzeOptions.Builder()
+                .text(text)
+                .features(features)
+                .build();
+
+        AnalysisResults response = service
+                .analyze(parameters)
+                .execute();
+        System.out.println(response);
     }
 
 }
