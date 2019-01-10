@@ -61,17 +61,5 @@ public class AttributeNode {
     public boolean isLeaf() {
         return isLeaf;
     }
-    
-//    public void setLeafValue(String leafValue) {
-//        this.leafValue = leafValue;
-//    }
-//    
-//    public String getLeafValue() {
-//        return leafValue;
-//    }
-    
-//    @Override
-//    public String toString() {
-//        return "{" + (parentStatus == null ? "" : parentStatus) + "-" + (isLeaf ? leafValue : attributeName + ": " + childNodes) + "}";
-//    }
+
 }

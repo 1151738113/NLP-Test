@@ -146,7 +146,43 @@
 			<artifactId>guava</artifactId>
 			<version>14.0.1</version>
 		</dependency>
-    </dependencies>
+		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-email -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-email</artifactId>
+			<version>1.5</version>
+		</dependency>
+        <!-- https://mvnrepository.com/artifact/freemarker/freemarker -->
+        <dependency>
+            <groupId>freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+            <version>2.3.9</version>
+        </dependency>
+
+        <!--Hutool是Hu + tool的自造词，谐音“糊涂”，寓意追求“万事都作糊涂观，无所谓失，无所谓得”的境界。-->
+		<dependency>
+			<groupId>cn.hutool</groupId>
+			<artifactId>hutool-all</artifactId>
+			<version>4.4.0</version>
+		</dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.4</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!--&lt;!&ndash; https://mvnrepository.com/artifact/io.gatling/jsr166e &ndash;&gt;-->
+		<!--<dependency>-->
+			<!--<groupId>io.gatling</groupId>-->
+			<!--<artifactId>jsr166e</artifactId>-->
+			<!--<version>1.0</version>-->
+		<!--</dependency>-->
+
+
+	</dependencies>
 
 	<build>
 		<plugins>
