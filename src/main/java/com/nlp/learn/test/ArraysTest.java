@@ -10,14 +10,6 @@ public class ArraysTest {
 
     public static void main(String[] args){
 
-//        int[] iArray = new int[]{2, 3, 4, 6};
-//
-//        int missing = getMissingNumber(iArray, 6);
-//
-//        System.out.printf("Missing number in array %s is %d %n", Arrays.toString(iArray), missing);
-
-
-
     }
 
 
