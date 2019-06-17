@@ -1,3 +1,4 @@
+# -*- coding:UTF-8 -*-
 import requests
 import time
 import datetime
@@ -17,7 +18,7 @@ def start(offset, sort):
     }
     res = requests.get(url, headers=headers).text
     data = json.loads(res)
-    picRepo = 'picRepo'
+    picRepo = 'picRepo2'
     if not os.path.exists(picRepo):
         os.makedirs(picRepo)
     if data.get("data"):
@@ -28,7 +29,7 @@ def start(offset, sort):
                 src = imgTag.attr("src")
                 strIndex = src.rfind('.')
                 suffix = src[strIndex:]
-                with open(f"{picRepo}/{uuid.uuid4()}{suffix}", 'wb') as f:
+                with open(f"{picRepo}/{uuid.uuid4()}{suffix}", "wb") as f\\:
                     f.write(requests.get(src).content)
 
 
